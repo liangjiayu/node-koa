@@ -1,22 +1,14 @@
 const Koa = require('koa');
-const Router = require('koa-router');
+const bodyparser = require('koa-bodyparser');
+
+const db = require('./mongodb');
+const articleRouter = require('./routes/article');
 
 const app = new Koa();
-const router = new Router();
 
-router.get('/', async (ctx, next) => {
-  ctx.body = {
-    aaa: 123,
-  };
-});
+app.use(bodyparser());
 
-router.get('/test', async (ctx) => {
-  ctx.body = ctx.url;
-});
-
-app
-  .use(router.routes())
-  .use(router.allowedMethods());
+app.use(articleRouter.routes(), articleRouter.allowedMethods());
 
 app.listen(3000, () => {
   console.log('Koa is listening in http://localhost:3000');
